@@ -27,6 +27,7 @@ import com.frostwire.jlibtorrent.alerts.Alert;
 import com.frostwire.jlibtorrent.alerts.AlertType;
 import com.frostwire.jlibtorrent.alerts.BlockFinishedAlert;
 import com.frostwire.jlibtorrent.alerts.PieceFinishedAlert;
+import com.frostwire.jlibtorrent.alerts.TorrentFinishedAlert;
 import com.github.se_bastiaan.torrentstream.listeners.TorrentListener;
 
 import java.io.File;
@@ -428,6 +429,7 @@ public class Torrent implements AlertListener {
      */
     private void pieceFinished(PieceFinishedAlert alert) {
         if (state == State.STREAMING && hasPieces != null) {
+
             int pieceIndex = alert.pieceIndex() - firstPieceIndex;
             hasPieces[pieceIndex] = true;
 
@@ -469,6 +471,7 @@ public class Torrent implements AlertListener {
     }
 
     private void blockFinished(BlockFinishedAlert alert) {
+
         for (Integer index : preparePieces) {
             if (index == alert.pieceIndex()) {
                 prepareProgress += progressStep;
@@ -477,6 +480,10 @@ public class Torrent implements AlertListener {
         }
 
         sendStreamProgress();
+    }
+
+    private void torrentFinished(TorrentFinishedAlert alert) {
+        listener.onStreamFinished(this);
     }
 
     private void sendStreamProgress() {
@@ -494,7 +501,8 @@ public class Torrent implements AlertListener {
     public int[] types() {
         return new int[]{
                 AlertType.PIECE_FINISHED.swig(),
-                AlertType.BLOCK_FINISHED.swig()
+                AlertType.BLOCK_FINISHED.swig(),
+                AlertType.TORRENT_FINISHED.swig()
         };
     }
 
@@ -506,6 +514,9 @@ public class Torrent implements AlertListener {
                 break;
             case BLOCK_FINISHED:
                 blockFinished((BlockFinishedAlert) alert);
+                break;
+            case TORRENT_FINISHED:
+                torrentFinished((TorrentFinishedAlert) alert);
                 break;
             default:
                 break;

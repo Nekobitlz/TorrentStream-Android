@@ -31,4 +31,6 @@ public interface TorrentListener {
     void onStreamProgress(Torrent torrent, StreamStatus status);
 
     void onStreamStopped();
+
+    void onStreamFinished(Torrent torrent);
 }

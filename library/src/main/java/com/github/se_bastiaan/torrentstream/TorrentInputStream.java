@@ -95,6 +95,7 @@ class TorrentInputStream extends FilterInputStream implements AlertListener {
     private synchronized void pieceFinished() {
         notifyAll();
     }
+    private synchronized void torrentFinished() { notifyAll(); }
 
     @Override
     public int[] types() {
@@ -108,6 +109,9 @@ class TorrentInputStream extends FilterInputStream implements AlertListener {
         switch (alert.type()) {
             case PIECE_FINISHED:
                 pieceFinished();
+                break;
+            case TORRENT_FINISHED:
+                torrentFinished();
                 break;
             default:
                 break;

@@ -520,6 +520,18 @@ public final class TorrentStream {
         }
 
         @Override
+        public void onStreamFinished(final Torrent torrent) {
+            for (final TorrentListener listener : listeners) {
+                ThreadUtils.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        listener.onStreamFinished(torrent);
+                    }
+                });
+            }
+        }
+
+        @Override
         public void onStreamPrepared(final Torrent torrent) {
             if (torrentOptions.autoDownload) {
                 torrent.startDownload();
