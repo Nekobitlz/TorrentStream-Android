@@ -40,15 +40,6 @@ android {
     }
 }
 
-ext {
-    libtorrentVersion = '1.2.1.0'
-}
-
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
-    api "com.frostwire:jlibtorrent:$libtorrentVersion"
-    api "com.frostwire:jlibtorrent-android-arm:$libtorrentVersion"
-    api "com.frostwire:jlibtorrent-android-arm64:$libtorrentVersion"
-    api "com.frostwire:jlibtorrent-android-x86:$libtorrentVersion"
-    api "com.frostwire:jlibtorrent-android-x86_64:$libtorrentVersion"
 }
